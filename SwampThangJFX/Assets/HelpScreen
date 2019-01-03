@@ -1,0 +1,24 @@
++-------------------------------------------------------------------------------------+
+| This help guide will show you the basic commands available to you.                  |
+| This is not an exhaustive list! Most commands must be inferred from the displayed   |
+| text, and you must respond in an appropriate way.                                   |
+|                                                                                     |
+| List of commands (command : description):                                           |
+|  - help : displays this help text.                                                  |
+|  - hide help : hides this help text and displays the last rendered screen.          |
+|  - go [north|east|south|west] : travel in the direction specified.                  |
+|  - start game [0-100] [easy|medium|hard] : start a new game with the gridsize and   |
+|                                          : difficulty specified.                    |
+|  - end game : destroys your current game state. required for 'start game' command   |
+|             : if you have already started a game this session.                      |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
+|                                                                                     |
++-------------------------------------------------------------------------------------+

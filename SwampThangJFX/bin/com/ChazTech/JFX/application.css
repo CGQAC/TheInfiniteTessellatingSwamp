@@ -1,0 +1,36 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property 
+#clickMe {
+	-fx-font-size: 30px;
+	-fx-background-color: rgba(255, 200, 155, .80);
+	-fx-text-fill: blue;
+	-fx-padding: 6 6 6 6;
+	-fx-border-radius: 8;
+	-fx-font-weigth: bold;
+}
+#myLabel {	
+	-fx-font-size: 30px;
+	-fx-background-color: rgba(255, 200, 155, .80);
+	-fx-text-fill: blue;
+	-fx-padding: 6 6 6 6;
+	-fx-border-radius: 8;
+	-fx-font-weigth: bold;
+}
+
+.root {
+	-fx-background-color: gray;
+}
+.button {
+	-fx-font-size: 30px;
+	-fx-background-color: rgba(255, 200, 155, .80);
+	-fx-text-fill: blue;
+	-fx-padding: 6 6 6 6;
+	-fx-border-radius: 8;
+	-fx-font-weigth: bold;
+}*/
+#displayArea {
+	-fx-font-family: Consolas;
+	-fx-border-width: 1px;
+}
+#disp1, #disp2, #disp3, #disp4, #disp5, #disp6, #disp7, #disp8, #disp9, #disp10, #disp11, #disp12, #disp13, #disp14, #disp15, #disp16, #disp17, #disp18, #disp19, #disp20, #disp21, #disp22, #disp23, #disp24 {
+	-fx-font-family: Consolas;
+}
