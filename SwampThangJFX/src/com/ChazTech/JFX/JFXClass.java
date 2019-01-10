@@ -1,8 +1,5 @@
 package com.ChazTech.JFX;
 
-import java.util.ArrayList;
-
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,11 +21,5 @@ public class JFXClass extends Application{
 		primaryStage.setTitle("Swamp Thang");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
-//		int animationInt = 1;
-//		Timeline timeline = null;
-//		ArrayList<String> animationList = new ArrayList<String>();
-//		MainController mc = new MainController(animationInt, timeline, animationList);
-//		mc.startAnimation();
 	}
 }

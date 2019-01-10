@@ -39,6 +39,11 @@ public class MainController {
 	SwampTile keyTile;
 	boolean helpVisible = false;
 	int firstBlank;
+	boolean moveEnabled = false;
+	int currentLineLower = 1;
+	int currentLineUpper = 6;
+	boolean bobIntro = true;
+	int bobSpot = 1;
 
 	@FXML
 	private Label command;
@@ -132,7 +137,6 @@ public class MainController {
 			String line = reader.readLine();
 			textSlide.add("");
 			while (line != null) {
-				System.out.println(line);
 				textSlide.add(line);
 				line = reader.readLine();
 			}
@@ -140,16 +144,33 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for (String a : textSlide) {
-			System.out.println(a);
-		}
 	}
 	
 	//INPUT + GENERAL DISPLAY
 	@FXML
 	public void onEnter(ActionEvent event){
-		System.out.println(inputCommand.getText());
+		System.out.println("::" + inputCommand.getText());
 		String command = inputCommand.getText().toLowerCase();
+		if (bobIntro) {
+			if (command.contains("hi") || command.contains("hey") || command.contains("hello")) {
+				if (command.contains("bob")) {
+					if (command.equals("hey bob")) {
+						startAnimation("Bob_Wave");
+					}
+					if (command.equals("hi bob")) {
+						startAnimation("Bob_Wave");
+					}
+					if (command.equals("hello bob")) {
+						startAnimation("Bob_Wave");
+					}
+				}
+			}
+		}
+		if (command.contains("more")) {
+			currentLineUpper++;
+			System.out.println("cLLcLU: " + currentLineLower + " " + currentLineUpper);
+			startTextimation(currentLineLower,currentLineUpper,100);
+		}
 		if (command.contains("append")) {
 			appendToDisplay(command);
 		}
@@ -173,44 +194,58 @@ public class MainController {
 		}
 		if (command.contains("end game")) {
 			newGame = false;
+			animationInt = 1;
+			textimationInt = 1;
+			newGame = false;
+			difficulty = "";
+			gridSize = 50;
+			helpVisible = false;
+			firstBlank = 0;
+			moveEnabled = false;
+			currentLineLower = 1;
+			currentLineUpper = 6;
+			bobIntro = true;
+			animationList = new ArrayList<ALObject>();
+			animationSlide = new ArrayList<String>();
+			backupSlide = new ArrayList<String>();
+			displayAnimation("TitleAnimation", 100);
 		}
 		if (command.contains("go")) {
-			if (command.contains("go n")) {
-				if (player.getX() < gridSize) {
-					player.setX(player.getX() + 1);
-				} else {
-					player.setX(1);
+			if (moveEnabled) {
+				if (command.contains("go n")) {
+					if (player.getX() < gridSize) {
+						player.setX(player.getX() + 1);
+					} else {
+						player.setX(1);
+					}
 				}
-			}
-			if (command.contains("go e")) {
-				if (player.getY() < gridSize) {
-					player.setY(player.getY() + 1);
-				} else {
-					player.setY(1);
+				if (command.contains("go e")) {
+					if (player.getY() < gridSize) {
+						player.setY(player.getY() + 1);
+					} else {
+						player.setY(1);
+					}
 				}
-			}
-			if (command.contains("go s")) {
-				if (player.getX() > 1) {
-					player.setX(player.getX() - 1);
-				} else {
-					player.setX(gridSize);
+				if (command.contains("go s")) {
+					if (player.getX() > 1) {
+						player.setX(player.getX() - 1);
+					} else {
+						player.setX(gridSize);
+					}
 				}
-			}
-			if (command.contains("go w")) {
-				if (player.getY() > 1) {
-					player.setY(player.getY() - 1);
-				} else {
-					player.setY(gridSize);
+				if (command.contains("go w")) {
+					if (player.getY() > 1) {
+						player.setY(player.getY() - 1);
+					} else {
+						player.setY(gridSize);
+					}
 				}
+				if (checkForEvent()) {
+					
+				}
+				delete_ShowPos();
 			}
-			if (checkForEvent()) {
-				
-			}
-			delete_ShowPos();
 		}
-		//	   focusLoss.setVisible(true);
-		//	   focusLoss.requestFocus();
-		//	   focusLoss.setVisible(false);
 		inputCommand.clear();
 	}
 	public void appendToDisplay(String appendText) {
@@ -493,7 +528,8 @@ public class MainController {
 			newGame = true;
 //			delete_ShowPos();
 			System.out.println("---");
-			startTextimation(1,6,2000);
+			moveEnabled = false;
+			startTextimation(currentLineLower,currentLineUpper,100);
 		}
 	}
 	
@@ -552,40 +588,52 @@ public class MainController {
 
 	//MOVEMENT + EVENT TEST
 	public void goNorth(ActionEvent event) {
-		if (player.getX() < gridSize) {
-			player.setX(player.getX() + 1);
-		} else {
-			player.setX(1);
+		if (moveEnabled) {
+			if (player.getX() < gridSize) {
+				player.setX(player.getX() + 1);
+			} else {
+				player.setX(1);
+			}
+			inputCommand.requestFocus();
+			checkForEvent();
+			delete_ShowPos();
 		}
-		checkForEvent();
-		delete_ShowPos();
 	}
 	public void goEast(ActionEvent event) {
-		if (player.getY() < gridSize) {
-			player.setY(player.getY() + 1);
-		} else {
-			player.setY(1);
+		if (moveEnabled) {
+			if (player.getY() < gridSize) {
+				player.setY(player.getY() + 1);
+			} else {
+				player.setY(1);
+			}
+			inputCommand.requestFocus();
+			checkForEvent();
+			delete_ShowPos();
 		}
-		checkForEvent();
-		delete_ShowPos();
 	}
 	public void goSouth(ActionEvent event) {
-		if (player.getX() > 1) {
-			player.setX(player.getX() - 1);
-		} else {
-			player.setX(gridSize);
+		if (moveEnabled) {
+			if (player.getX() > 1) {
+				player.setX(player.getX() - 1);
+			} else {
+				player.setX(gridSize);
+			}
+			inputCommand.requestFocus();
+			checkForEvent();
+			delete_ShowPos();
 		}
-		checkForEvent();
-		delete_ShowPos();
 	}
 	public void goWest(ActionEvent event) {
-		if (player.getY() > 1) {
-			player.setY(player.getY() - 1);
-		} else {
-			player.setY(gridSize);
+		if (moveEnabled) {
+			if (player.getY() > 1) {
+				player.setY(player.getY() - 1);
+			} else {
+				player.setY(gridSize);
+			}
+			inputCommand.requestFocus();
+			checkForEvent();
+			delete_ShowPos();
 		}
-		checkForEvent();
-		delete_ShowPos();
 	}
 	public boolean checkForEvent() {
 		Boolean event = false;
@@ -615,10 +663,17 @@ public class MainController {
                         @Override public void handle(ActionEvent actionEvent) {   
                             Platform.runLater(()->{
                             	if (textSlide.get(textimationInt).contains("<anim>")) {
-                            		displayAnimation("Bob_Intro", 100);
+                            		String[] animFile = textSlide.get(textimationInt).split(">");
+                            		System.out.println(animFile[1]);
+                            		textTimeline.stop();
+                            		displayAnimation(animFile[1], 100);
                             	} else {
                             		appendToDisplay(textSlide.get(textimationInt));
                             		textimationInt++;
+                            		currentLineLower++;
+                            	}
+                            	if (currentLineLower == currentLineUpper) {
+                            		setVisible(true);
                             	}
                             });
                         }
@@ -643,82 +698,80 @@ public class MainController {
 	}
     public void changeAnimation(int animationInt, int animationLength) {
     	System.out.println("Slide:" + animationInt + "/" + animationLength);
-    	if (animationInt == animationLength) {
-    		setVisible(true);
-    	}
     	for (int i = 1; i <= 24; i++) {
+        	String slideText = (String) animationList.get(animationInt-1).getALObject().get(i-1);
     		switch(i) {
     		case 1:
-    			disp1.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp1.setText(slideText);
     			break;
     		case 2:
-    			disp2.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp2.setText(slideText);
     			break;
     		case 3:
-    			disp3.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp3.setText(slideText);
     			break;
     		case 4:
-    			disp4.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp4.setText(slideText);
     			break;
     		case 5:
-    			disp5.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp5.setText(slideText);
     			break;
     		case 6:
-    			disp6.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp6.setText(slideText);
     			break;
     		case 7:
-    			disp7.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp7.setText(slideText);
     			break;
     		case 8:
-    			disp8.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp8.setText(slideText);
     			break;
     		case 9:
-    			disp9.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp9.setText(slideText);
     			break;
     		case 10:
-    			disp10.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp10.setText(slideText);
     			break;
     		case 11:
-    			disp11.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp11.setText(slideText);
     			break;
     		case 12:
-    			disp12.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp12.setText(slideText);
     			break;
     		case 13:
-    			disp13.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp13.setText(slideText);
     			break;
     		case 14:
-    			disp14.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp14.setText(slideText);
     			break;
     		case 15:
-    			disp15.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp15.setText(slideText);
     			break;
     		case 16:
-    			disp16.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp16.setText(slideText);
     			break;
     		case 17:
-    			disp17.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp17.setText(slideText);
     			break;
     		case 18:
-    			disp18.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp18.setText(slideText);
     			break;
     		case 19:
-    			disp19.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp19.setText(slideText);
     			break;
     		case 20:
-    			disp20.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp20.setText(slideText);
     			break;
     		case 21:
-    			disp21.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp21.setText(slideText);
     			break;
     		case 22:
-    			disp22.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp22.setText(slideText);
     			break;
     		case 23:
-    			disp23.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp23.setText(slideText);
     			break;
     		case 24:
-    			disp24.setText((String) animationList.get(animationInt-1).getALObject().get(i-1));
+    			disp24.setText(slideText);
     			break;
     		}
     	}
@@ -727,6 +780,20 @@ public class MainController {
     		animationInt = 1;
             timeline.stop();
             setVisible(true);
+    		if (bobIntro) {
+    			if (bobSpot == 3) {
+    				appendToDisplay("testing 3");
+        			bobIntro = false;
+    			}
+    			if (bobSpot == 2) {
+    				appendToDisplay("testing 2");
+    				bobSpot++;
+    			}
+    			if (bobSpot == 1) {
+    				appendToDisplay("testing");
+    				bobSpot++;
+    			}
+    		}
     	}
     }
 	public void displayAnimation(String fileName, int frameTime) {
@@ -763,7 +830,6 @@ public class MainController {
                         Platform.runLater(()->{
                         	changeAnimation(animationInt, animationLength);
                         	animationInt++;
-                        	//if animationint == animationlength, show next animation, else, ++
                         });
                     }
                 }
